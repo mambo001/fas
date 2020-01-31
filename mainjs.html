@@ -1,0 +1,2010 @@
+<script> 
+
+  // On document ready
+  $(document).ready(function(){
+
+    // Initialize autocomplete
+    $('input.autocomplete').autocomplete({
+      data: {
+      "aldwins": "","anjenette": "","asecreto": "","beapatriz": "","bienjella": "","cbarsana": "","charinan": "","dasigo": "","geraban": "","jpalanca": "","jpedrosa": "","jranillo": "","jranola": "","krisnelyn": "","madelo": "","marianjennine": "","mitzic": "","quinonesd": "","randeld": "","reubenmark": "","rizelirish": "","rodessa": "","rrafallo": "","chrislamjan": "","jlabor": "","zdaragosa": "","jcajeles": "","jpatindol": "","jmontilde": "","sdingding": "","snavascues": "","marcillas": "","pepitoj": "","bual": "","janebernadette": "","desoacido": "","justingerik": "","johlianne": ""
+      },
+      limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+      onAutocomplete: function(val) {
+        // Callback function when value is autcompleted.
+      },
+      minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
+
+    // Tooltips
+    $('.tooltipped').tooltip({delay: 50});
+
+    // Initialize QA view
+    qaView();
+
+
+    
+  });
+
+  // Declarations
+  let emailEditor = document.querySelector('#emailEditor'),
+        surveyUrl2 = document.querySelector('#surveyUrl2'),
+        messageText2 = document.querySelector('#messageText2'),
+        screenshotUrl2 = document.querySelector('#screenshotUrl2'),
+        queue = "core",
+        link = "http://402-trial2.appspot.com/internal/creator/ops_review/?survey=",
+        datez = moment().format();
+
+
+  const qaList = ["beapatriz","cbarsana","jranola","marianjennine","reubenmark","jcajeles","jmontilde","janebernadette"],
+        caseData = [],
+        reserveCase = document.querySelector('#reserveCase'),
+        surveyURLQA = document.querySelector('#surveyURLQA'),
+        assignCases = document.querySelector('#assignCases'),
+        autocompleteInput = document.querySelector('#autocompleteInput'),
+        clearBtn = document.querySelector('#clearBtn'),
+        caseLink = document.querySelector('#caseLink');
+
+
+
+
+
+
+
+
+
+  
+
+
+
+    
+
+    // Dark Mode Toggle
+    // Initial dark mode settings value
+    if  (!localStorage.dMode){
+        localStorage.setItem("dMode", "off");
+    } else {
+        console.log('localStorage is set!');
+        if  (localStorage.dMode == 'on'){
+                addColor();
+        } else {
+                removeColor();
+        }
+    }
+
+    $('#survey-table-2').hide()
+
+    reserveCase.addEventListener('click', addCaseReserve);
+    assignCases.addEventListener('click', assignCasesQA);
+    clearBtn.addEventListener('click', clearCasesForm);
+
+    function clearCasesForm (){
+      autocompleteInput.value = "",
+      surveyURLQA.value = "",
+      newCaseList.innerHTML = "";
+    }
+
+    function assignCasesQA(){
+      if (caseData){
+        google.script.run.withSuccessHandler(assignQASuccess).assignNewCases(JSON.stringify(caseData));
+      }
+    }
+
+    function assignQASuccess(data){
+      console.log("data: " + JSON.parse(data));
+      refresh_nitable();
+      clearCasesForm();
+      swal("Success!","Survey/s assigned successfully","success");
+    }
+
+    function addCaseReserve(){
+      let surveyURL = surveyURLQA.value,
+          ldapAssign = autocompleteInput.value,
+          assignObject = {
+            ldap: ldapAssign,
+            url: surveyURL
+          },
+          newCase = document.createElement("li"),
+          newCaseList = document.querySelector("#newCaseList");
+
+      caseData.push(assignObject);
+      console.log(assignObject);
+
+      newCase.classList.add("collection-item");
+      newCase.innerHTML = `
+        <a href="${surveyURL}">
+          <p>${surveyURL}</p>
+        </a>
+      `;
+      newCaseList.parentElement.classList.remove('hide');
+      newCaseList.appendChild(newCase);
+    }
+
+    function notifyMe() {
+      if (Notification.permission !== 'granted')
+      Notification.requestPermission();
+      else {
+        var notification = new Notification('Notification title', {
+          icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+          body: "Hey there! You've been notified!",
+        });
+    
+        notification.onclick = function () {
+          window.open('http://stackoverflow.com/a/13328397/1269037');
+        };
+    
+      }
+    
+    }
+      
+    const darkModeBtn = document.querySelector('#darkModeBtn');
+    darkModeBtn.addEventListener('click', toggleDarkMode);
+    
+    function toggleDarkMode (){
+        if (localStorage.dMode == 'off') {
+            localStorage.dMode = "on";
+            addColor();
+        } else {
+            localStorage.dMode = "off";
+            removeColor();
+        }
+    }
+
+    function addColor (){
+     }
+
+    function removeColor (){
+         }
+
+$('#newSurveyText').bind('input propertychange', function() {
+   enable_take();
+});
+    
+    var options = {
+        debug: 'info',
+        modules: {
+        toolbar: '#toolbar'
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+    };
+    var quill = new Quill('#editor', options);
+    
+    var options2 = {
+        debug: 'info',
+        modules: {
+        toolbar: '#toolbar-ne'
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+    };
+    var quill2 = new Quill('#editor-ne', options2);
+    
+    var decision = "compliant";
+    var refreshIntervalId;
+
+    // Email Content
+    
+    // Policy Announcement
+    const kbLink = 'https://sites.google.com/a/google.com/402kb/home?authuser=0';
+    const announcementText1 = `
+        <h3 class="subheader">Survey Review tool Announcement</h3>
+        <ul class="list">
+            <li>
+                <div class="valign-wrapper">
+                    <div class="title">
+                        <span>New Endgame Tool!</span>
+                    </div>
+                    <i class="material-icons ml-auto">info</i>
+                </div>
+            </li>
+            <li>
+                <div class="valign-wrapper">
+                    <div class="title">
+                        CRUST IS ON THE UI NOW<br>
+                        <span>Crust surveys should have a separate queue on the UI. Just click the Crust button to go there. Ya know.</span>
+                    </div>
+                    <i class="material-icons ml-auto">info</i>
+                </div>
+            </li>
+        </ul><br><br>
+        <a href="${kbLink}" class="btn waves-effect waves-light blue" target="_blank" style="width: 100%;">LEARN MORE</a>
+        `;
+        
+    let announcement1 = `<span style="max-width: 400px; width: 360px; word-break: normal; color: #fff; letter-spacing: 0.04em;">${announcementText1}</span>`;
+    
+    const compliantBtn = document.querySelector('#compliant-btn');
+    const markreviewedBtn = document.querySelector('#close-btn');
+    const noncompliantBtn = document.querySelector('#noncompliant-btn');
+    const forcestoppedBtn = document.querySelector('#forcestopped-btn');
+    const needsinfoBtn = document.querySelector('#needsinfo-btn');
+
+
+$(document).on("click", ".select-wrapper", function (event) { event.stopPropagation(); });
+    function add_assigned() {
+
+        if(queue == "bls1" || queue == "core") {
+            $('#start-review').removeClass("disabled");
+            let newSurvey = document.createElement('li');
+            newSurvey.classList.add("newSurveys");
+            const newSurveyText = document.querySelector('#newSurveyText').value.split("-")[0];
+            let htmlbls1 = `
+                <li  style="display: flex; justify-content: space-between;" class="collection-item">
+                    <input class="surveyIdInput" type="text" name="" id="newSurveyText" value="${newSurveyText.value}">
+                    <a onclick="delete_row(this)" class="material-icons btn red lighten-2 tooltipped" data-position="top"  data-tooltip="remove survey" style="cursor: pointer; padding: 5px; border-radius: 50%; margin-left: 5px;">remove</a>
+                    <a id="addNewSurvey" href="http://402-trial2.appspot.com/internal/creator/ops_review/?survey=${newSurveyText.value}" target="_blank" class="material-icons btn" style="cursor: pointer; padding: 5px; border-radius: 50%; margin-left: 5px;">open_in_new</a>
+                </li>
+                `;
+            newSurvey.innerHTML += htmlbls1;
+            collectionParent.appendChild(newSurvey);
+            $('#newSurveyText').val("");
+        } else {
+            $('#start-review').removeClass("disabled");
+            $('#bls2-decision').removeClass("hide");
+            $('#violations-div').removeClass("hide");
+            let newSurvey = document.createElement('li');
+            newSurvey.classList.add("newSurveys");
+            const newSurveyText = document.querySelector('#newSurveyText');
+            let htmlbls2 = `<li  style="display: flex; justify-content: space-between;" class="collection-item">
+            <input class="surveyIdInput" type="text" name="" id="newSurveyText" value="${newSurveyText.value}">
+            <a onclick="delete_row(this)" class="material-icons btn red lighten-2 tooltipped" data-position="top"  data-tooltip="remove survey" style="cursor: pointer; padding: 5px; border-radius: 50%; margin-left: 5px;">remove</a>
+            <a id='addNewSurvey' href='https://adwords.corp.google.com/aw/labs/video/brands/edit?${newSurveyText.value}' target='_blank' class='material-icons btn' style='cursor: pointer; padding: 5px; border-radius: 50%; margin-left: 5px;'>open_in_new</a>
+            `;
+            newSurvey.innerHTML += htmlbls2;
+            collectionParent.appendChild(newSurvey);
+            $('#newSurveyText').val("");
+        }
+    }
+
+    function unassign_survey (){
+        $body.addClass("loading");
+            clearInterval(refreshIntervalId);
+            nmin = 0;
+            nsec = 0;
+            nhour = 0;
+            document.getElementById("aht").innerText = "0:0:0 mins"
+        add_log("finished the survey.");
+        comment_just = "";
+        $("#screenshot-text").val("");
+        $(".chips .chip").remove();
+        $('#caseInfo').addClass("hide");
+        $('#queueChange-elements').addClass("hide");
+        $("#screenshot-text").val("");
+        $("#surveytype-select").val("");
+        $("#lang-select").val("");
+        $("#country-select").val("");
+        $("#queue-select").val("");
+        $("#rmto-select").val("");
+        $('#customertype-select').val("");
+        $('#lang-select').material_select();
+        $('#country-select').material_select();
+        $('#queue-select').material_select();
+        $('#customertype-select').material_select();
+        $('#surveytype-select').material_select();
+        $('#rmto-select').material_select();
+        $("#violations-select").material_select();
+        google.script.run.withSuccessHandler(populate_categories).dynamic_categories();
+        $("#violations-select").length = 0;
+        $('#violations-select').material_select('destroy');
+            swal("Success!","Survey/s unassigned successfully","success");
+       
+        finish_btn();
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+        $body.removeClass("loading");
+    localStorage.removeItem("assigned_ewoq");
+        assigned_survey = "";
+        $("#newSurveyText").val("");
+        $("#newSurveyText").removeAttr("disabled");
+    }
+    
+    function remove_assigned (){
+      $('#newSurveyText').val("");
+      $('#openSurvey').addClass('disabled');
+      assigned_survey = "";
+    }
+    
+    function set_aht(min, sec){
+        nmin = min;
+        nsec = sec;
+        nhour = 0;
+    }
+        
+    function addSurvey() {
+    }
+    
+    function delete_row(e)
+    {
+        e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+    }
+
+    function assignUserShit(data){
+        console.log(data);
+        var name = data.replace(/@[^@]+$/, '');
+        let securityPhoto = document.createElement('img');
+        localStorage.setItem("ldap", name);
+
+
+
+        document.querySelector('#userLdap').innerHTML = name;
+    
+        securityPhoto.src =`https://moma-teams-photos.corp.google.com/photos/${name}?sz=212`;
+        // document.querySelector('#userLdap').appendChild(securityPhoto);
+
+
+    }
+    
+    var table = $('#survey-table');
+    var casestable = $('#cases-table');
+    var nicasestable = $('#nicases-table');
+    var feedback_table = $('#feedback-table');
+    $body = $("body");
+
+    $(document).ready(function() {
+        if (!Notification) {
+            alert('Desktop notifications not available in your browser. Try Chromium.'); 
+            return;
+        }
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+
+        $('.dropdown-button').dropdown({
+            inDuration: 300,
+            outDuration: 225,
+            constrainWidth: false, // Does not change width of dropdown to that of the activator
+            hover: false, // Activate on hover
+            gutter: 0, // Spacing from edge
+            belowOrigin: false, // Displays dropdown below the button
+            alignment: 'left', // Displays dropdown with edge aligned to the left of button
+            stopPropagation: false // Stops event propagation
+            }
+        );
+
+        $('#notificationsBtn.dropdown-button').dropdown({
+            inDuration: 300,
+            outDuration: 225,
+            constrainWidth: true, // Does not change width of dropdown to that of the activator
+            hover: false, // Activate on hover
+            gutter: 0, // Spacing from edge
+            belowOrigin: false, // Displays dropdown below the button
+            alignment: 'left', // Displays dropdown with edge aligned to the left of button
+            stopPropagation: false // Stops event propagation
+        });
+        
+        google.script.run.withSuccessHandler(assignUserShit).userProfile();
+        google.script.run.withSuccessHandler(populate_cases).getCases();
+        google.script.run.withSuccessHandler(populate_nicases).getNICases();
+        //google.script.run.withSuccessHandler(flashreport_response).flashreport();
+        pushsurvey();
+        google.script.run.withSuccessHandler(notifGo).get_notifications();
+
+        $('#lang-select').material_select();
+        $('#country-select').material_select();
+        $('#queue-select').material_select();
+        $('#processed-select').material_select();
+        $('#customertype-select').material_select();
+        $('#surveytype-select').material_select();
+        $('#rmto-select').material_select();
+        $("#violations-select").material_select();
+        $('.modal').modal();
+        
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+    
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+    
+            // Toggle the visibility
+            column.visible( ! column.visible() );
+        } );
+        show_quote();
+        setInterval(show_quote, 1200000); 
+        google.script.run.withSuccessHandler(populate_feedback).get_feedback();
+
+        //setup before functions
+        let typingTimer,
+            doneTypingInterval = 1000;  //time in ms, 5 second for example
+
+        //on keyup, start the countdown
+        $('#entityIDSearchInput').keyup(function(){
+            clearTimeout(typingTimer);
+            if ($('#entityIDSearchInput').val) {
+                typingTimer = setTimeout(function(){
+                    //do stuff here e.g ajax call etc....
+                    search();
+                    console.log('done typing.');
+                }, doneTypingInterval);
+            }
+        });
+    });
+    
+    function populate_feedback(response) {
+        feedback_table = $('#feedback-table').DataTable( {
+            data: JSON.parse(response),
+            sDom: 'lrtip',
+            bPaginate: true,
+            "bLengthChange": false, 
+            "pageLength": 15,    
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [
+                {
+                    "targets": [1],
+                    "visible": false
+                }
+            ], columns: [                
+                { title: "ID", width: "50px" },
+                { title: "LDAP", width: "50px" },
+                { title: "Date Submitted", width: "50px" },
+                { title: "Survey URL", width: "50px" },
+                { title: "Feedback", width: "50px" },
+                { title: "Screenshot", width: "50px" },
+                { title: "Status", width: "50px" }
+                ],
+            "initComplete": function () {
+                        $('#feedback-table tbody').off().on('click', 'tr', function () {
+                            var data = feedback_table.row( this ).data();
+                            feedback_table.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected'); 
+                        });
+                        
+            }, 'rowCallback': function(row, data, index){
+              if(data[6] == "FIXED") {
+                  $(row).find('td:eq(5)').css('color', 'white');
+                  $(row).find('td:eq(5)').css({"background-color":"#4caf50"});
+                }
+              else if(data[6] == "PENDING") {
+                  $(row).find('td:eq(5)').css('color', 'white');
+                  $(row).find('td:eq(5)').css({"background-color":"#ff9800"});
+                }
+              else if(data[6] == "INTENDED BEHAVIOR") {
+                  $(row).find('td:eq(5)').css('color', 'white');
+                  $(row).find('td:eq(5)').css({"background-color":"#03a9f4"});
+                }
+              else if(data[6] == "ONGOING") {
+                  $(row).find('td:eq(5)').css('color', 'white');
+                  $(row).find('td:eq(5)').css({"background-color":"#e53935"});
+                }
+                else {
+                  $(row).find('td:eq(5)').css('color', 'white');
+                  $(row).find('td:eq(5)').css({"background-color":"#000000"});
+                
+                }
+            }
+        });
+      
+    }
+    
+function notifGo(data) {
+    const parsedData = JSON.parse(data),
+        dropdown = document.querySelector('#dropdown');
+    // Remove array headers
+    parsedData.shift();
+    parsedData.reverse();
+
+    // for debugging
+//      console.table(parsedData);
+
+    // Assign notification bell number
+    document.querySelector('#notificationsBadge').setAttribute('data-badge', parsedData.length);
+
+    for (q = 0; q < parsedData.length; q++){
+//          console.log(`ey: ${parsedData[q]}`);
+        
+        const newNotification = document.createElement('li');
+        newNotification.className = `collection-item notifCards`;
+        newNotification.style.padding = '0px';
+        newNotification.innerHTML = `
+        <div class="card" style="margin: 0px;">
+            <div class="card-content" style="font-size: 0.85rem; padding: 14px 16px; display: flex; flex-direction: column;">
+                <p>${parsedData[q][5]} has added a new announcement: ${parsedData[q][2]}.</p>
+                <p style="color: rgba(51,51,51,0.75); font-size: 0.95rem;">${parsedData[q][3]}</p>
+            </div>
+            <div class="" style="height: 5vh; font-size: 13px; display: flex; justify-content: space-between; align-items: center; padding: 0px 16px; color: rgba(51,51,51,0.65)">
+                <span style="" class="notif-action ">${moment(parsedData[q][6]).fromNow()}</span>
+                <i style="font-size: 13px;" class="material-icons notif-action mark-as-read">adjust</i>   
+            </div>
+        </div>
+        `;
+        dropdown.appendChild(newNotification);
+    }
+    const seeMore = document.createElement('li');
+    seeMore.className = 'collection-item see-more';
+    seeMore.innerHTML = `
+                <a>See More</a>
+    `;
+    dropdown.appendChild(seeMore);
+}
+
+    function flashreport_response(response) {
+        $("#pending-text").text(response["pending"]);
+        $("#reviewed-text").text(response["reviewed"]);
+        $("#ongoing-text").text(response["ongoing"]);
+        $("#processed-text").text(response["processed"]);
+        $("#en-text").text(response["en"]);
+        $("#nonen-text").text(response["nonen"]);
+    }
+var needs_info = "false";
+var quote_interval;
+    function pushsurvey() {
+        if(localStorage.getItem("assigned_ewoq") != null){
+            let raw = JSON.parse(localStorage.getItem("assigned_ewoq"));
+            assigned_survey = raw["survey_ids"];
+            let start_time = raw["start_time"];
+        $('#openSurvey').removeClass('disabled');
+        $('#caseInfo').removeClass('hide');
+        $('#newSurveyText').val(assigned_survey);
+        $('#newSurveyText').attr("disabled","disabled");
+        $('#unassign-survey').removeClass("disabled");
+        $('#start-review').addClass("disabled");
+        $('#compliant-btn').removeClass("disabled");
+        $('#close-btn').removeClass("disabled");
+        $('#noncompliant-btn').removeClass("disabled");
+        
+        if(raw["decision"] == "needs_info") {
+        // $('#needsinfo-btn').addClass("disabled");
+        
+          var date = new Date(raw["end_time"]);
+          var aht = Math.abs(new Date(date) - new Date(start_time));
+          var min = Math.floor((aht/1000)/60);
+          var sec = Math.floor((aht/1000)%60);
+          set_aht(min, sec);
+          AHT();
+        }
+        else {
+        // $('#needsinfo-btn').removeClass("disabled");
+          var date = new Date();
+          var aht = Math.abs(new Date(date) - new Date(start_time));
+          var min = Math.floor((aht/1000)/60);
+          var sec = Math.floor((aht/1000)%60);
+          set_aht(min, sec);
+          AHT();
+          refreshIntervalId = setInterval(AHT, 1000); 
+        }
+        
+        }
+       
+    }
+    
+    function guid() {
+    function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return 'SR' + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+    }
+
+    function submit_status(response) {
+        swal("Success!","Email Sent","success");
+        
+    $body.removeClass("loading")
+    }
+
+    //   function getAction (e){
+    //     console.log(e.classList);
+    //   }
+    
+    function enable_take() {
+      if($('#newSurveyText').val() != "")
+        $('#start-review').removeClass("disabled");
+        
+      else
+        $('#start-review').addClass("disabled");
+      
+    }
+    
+    function initialize_btn() {
+        $('#start-review').addClass("disabled");
+        $('#unassign-survey').addClass("disabled");
+        $('#close-btn').addClass("disabled");
+        $('#compliant-btn').addClass("disabled");
+        $('#close-btn').addClass("disabled");
+        $('#noncompliant-btn').addClass("disabled");
+        $('#forcestopped-btn').addClass("disabled");
+        // $('#needsinfo-btn').addClass("disabled");
+        
+        
+        $('#closeCase').addClass("disabled");
+        $('#openEmail').addClass("disabled");
+        $('#enable_actions').addClass("disabled");
+        
+        $('#violations-select').val("").change;
+        $('#surveytype-select').val("").change;
+        $('#violations-select').material_select();
+        $('#surveytype-select').material_select();
+    }
+    var comment_just = "";
+    var assigned_survey = "";
+    var creator = "";
+    var title = "";
+    function assign_surveys() {
+        $body.addClass("loading");
+        
+        assigned_survey = $("#newSurveyText").val();
+        console.log("fuck: "+getFormattedDate());
+        let startz = getFormattedDate();
+                
+    
+        if  (!localStorage.assigned){
+          localStorage.setItem("assigned_ewoq",JSON.stringify({ 
+              "survey_ids": assigned_survey,
+              "start_time": startz,
+              "decision": "new"
+            }));
+          } else {
+            console.log('There is assigned survey.');
+        }
+          
+        caseLink.classList.remove("hide");
+        caseLink.setAttribute("target", "_blank");
+        caseLink.setAttribute("href", assigned_survey);
+        caseLink.textContent = assigned_survey;
+
+        assign_success();
+    }
+
+    function assign_success() {
+      swal("Success!","Survey/s assigned successfully","success");
+      $("#newSurveyText").attr("disabled","disabled");
+      $('#unassign-survey').removeClass("disabled");
+      $('#caseInfo').removeClass("hide");
+      $('#start-review').addClass("disabled");
+      $('#compliant-btn').removeClass("disabled");
+      $('#close-btn').removeClass("disabled");
+      $('#noncompliant-btn').removeClass("disabled");
+
+      // $('#needsinfo-btn').removeClass("disabled");
+AHT();
+refreshIntervalId = setInterval(AHT, 1000); 
+      $body.removeClass("loading")
+    }
+
+    function unassign_success(response) {
+        $('#caseInfo').addClass("hide");
+        if(nmin > 5) {
+          const aht_alert = document.querySelector('#aht-flag');
+          aht_alert.classList.remove('hide');
+          }
+    if(response == "success") {
+        swal("Success!","Survey/s unassigned successfully","success");
+        
+        add_log("unassigned the survey.");
+        }
+        else
+        swal("Success!",response,"error");
+            clearInterval(refreshIntervalId);
+            nmin = 0;
+            nsec = 0;
+            nhour = 0;
+            document.getElementById('aht').innerText = "00:00:00";
+            $body.removeClass("loading")
+        assigned_survey = "";
+    }
+
+    function refresh_bls1() {
+        $('#col-change').text("Entity ID");
+        $('#col-change-footer').text("Entity ID");
+        $('#screenshot2-text').attr('disabled', 'disabled');
+        $('#violation-text').attr('disabled', 'disabled');
+        $('#bls1_list').attr('disabled', 'disabled');
+        $('#bls2_list').attr('disabled', 'disabled');
+        $('#core_list').attr('disabled', 'disabled');
+        setTimeout(function(){
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+            $('#core_list').removeAttr('disabled');
+        },4000);
+        $('#bls1_list').addClass("darken-3");
+        $('#bls2_list').addClass("lighten-3");
+        $('#core_list').addClass("lighten-3");
+        $('#bls1_list').removeClass("lighten-3");
+        $('#bls2_list').removeClass("darken-3");
+        $('#core_list').removeClass("darken-3");
+        $('#survey-table').show();
+        $('#survey-table-2').hide();
+        queue = "bls1";
+        table.clear();
+        table.destroy();
+        get_all_bls1();
+    }
+
+    
+    function refresh_bls2() {
+        $('#bls1_list').attr('disabled', 'disabled');
+        $('#bls2_list').attr('disabled', 'disabled');
+        $('#core_list').attr('disabled', 'disabled');
+        $('#screenshot2-text').removeAttr('disabled');
+        $('#violation-text').removeAttr('disabled');
+        document.querySelector('.bls2Shit').classList.remove('hide');
+        // $('#screenshot2-text').removeAttr('hide');
+        // $('#violation-text').removeAttr('hide');
+        setTimeout(function(){
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+            $('#core_list').removeAttr('disabled');
+        },4000);
+        $('#bls2_list').addClass("darken-3");
+        $('#bls1_list').addClass("lighten-3");
+        $('#core_list').addClass("lighten-3");
+        $('#bls2_list').removeClass("lighten-3");
+        $('#bls1_list').removeClass("darken-3");
+        $('#core_list').removeClass("darken-3");
+        $('#survey-table').hide();
+        $('#survey-table-2').show();
+        queue = "bls2";
+        table.clear();
+        table.destroy();
+        get_all_bls2();
+    }
+    
+    function refresh_core() {
+        $('#col-change').text("TAT");
+        $('#col-change-footer').text("TAT");
+        $('#bls1_list').attr('disabled', 'disabled');
+        $('#bls2_list').attr('disabled', 'disabled');
+        $('#core_list').attr('disabled', 'disabled');
+        $('#crust_list').attr('disabled', 'disabled');
+        $('#screenshot2-text').removeAttr('disabled');
+        $('#violation-text').removeAttr('disabled');
+        // $('#screenshot2-text').removeAttr('hide');
+        // $('#violation-text').removeAttr('hide');
+        setTimeout(function(){
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+            $('#core_list').removeAttr('disabled');
+            $('#crust_list').removeAttr('disabled');
+        },4000);
+        $('#bls2_list').addClass("lighten-3");
+        $('#bls1_list').addClass("lighten-3");
+        $('#core_list').addClass("darken-3");
+        $('#crust_list').addClass("lighten-3");
+        $('#bls2_list').removeClass("darken-3");
+        $('#bls1_list').removeClass("darken-3");
+        $('#core_list').removeClass("lighten-3");
+        $('#crust_list').removeClass("darken-3");
+        $('#survey-table').show();
+        $('#survey-table-2').hide();
+        queue = "core";
+        table.clear();
+        table.destroy();
+        get_all_core();
+    }
+    
+    function refresh_crust() {
+        $('#col-change').text("TAT");
+        $('#col-change-footer').text("TAT");
+        $('#bls1_list').attr('disabled', 'disabled');
+        $('#bls2_list').attr('disabled', 'disabled');
+        $('#core_list').attr('disabled', 'disabled');
+        $('#crust_list').attr('disabled', 'disabled');
+        $('#screenshot2-text').removeAttr('disabled');
+        $('#violation-text').removeAttr('disabled');
+        // $('#screenshot2-text').removeAttr('hide');
+        // $('#violation-text').removeAttr('hide');
+        setTimeout(function(){
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+            $('#core_list').removeAttr('disabled');
+            $('#crust_list').removeAttr('disabled');
+        },4000);
+        $('#bls2_list').addClass("lighten-3");
+        $('#bls1_list').addClass("lighten-3");
+        $('#core_list').addClass("lighten-3");
+        $('#crust_list').addClass("darken-3");
+        $('#bls2_list').removeClass("darken-3");
+        $('#bls1_list').removeClass("darken-3");
+        $('#core_list').removeClass("darken-3");
+        $('#crust_list').removeClass("lighten-3");
+        $('#survey-table').show();
+        $('#survey-table-2').hide();
+        queue = "crust";
+        table.clear();
+        table.destroy();
+        get_all_crust();
+    }
+
+    var quotes = [];
+    
+  var fun_facts = [];
+    function get_all_bls1() {
+        google.script.run.withSuccessHandler(populate_table).get_bls1();
+//        google.script.run.withSuccessHandler(populate_tablez).get_bls1();
+    }
+
+    function get_all_bls2() {
+        google.script.run.withSuccessHandler(populate_table_2).get_bls2();
+    }
+    
+    function get_all_core() {
+        google.script.run.withSuccessHandler(populate_table).get_core();
+    }
+    
+    function get_all_crust() {
+        google.script.run.withSuccessHandler(populate_table).get_crust();
+    }
+    
+     function get_all_ewoq() {
+        google.script.run.withSuccessHandler(populate_table).get_ewoq();
+    }
+
+    function populate_table(response) {
+        table = $('#survey-table').DataTable( {
+            data: JSON.parse(response),
+            sDom: 'lrtip',
+            bPaginate: true,
+            "bLengthChange": false, 
+            "pageLength": 15,    
+            autoWidth: true,
+            responsive: true,
+            columnDefs: [
+                {
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ],
+            "initComplete": function () {
+                        $('#cases-table tbody').off().on('click', 'tr', function () {
+                            var data = casestable.row( this ).data();
+                            casestable.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected'); 
+                        });
+            },'rowCallback': function(row, data, index){
+              if(data[2].indexOf("ago") != -1) {
+                  $(row).find('td:eq(2)').css('color', 'white');
+                  $(row).find('td:eq(2)').css({"background-color":"#e53935"})
+                }
+              else {
+                  for(var i = 0; i <= 59; i++) {
+                    if(data[2].includes(i.toString() + " mins") && i > 45) {
+                      $(row).find('td:eq(2)').css('color', 'white');
+                      $(row).find('td:eq(2)').css({"background-color":"#7cb342"});
+                      break;
+                    } else{
+                        $(row).find('td:eq(2)').css('color', 'white');
+                        $(row).find('td:eq(2)').css({"background-color":"#ffb300"});
+                      }
+                  }
+                }
+                if(data[6] == "ongoing" || data[6] == "decided") {
+                      $(row).find('td:eq(2)').css('color', 'white');
+                      $(row).find('td:eq(2)').css({"background-color":"#42a5f5"});
+                }
+                if(data[5] == document.querySelector("#userLdap").innerText) {
+                      $(row).find('td:eq(0)').css('color', 'teal');
+                      $(row).find('td:eq(0)').css({"background-color":"#bdbdbd"});
+                      $(row).find('td:eq(1)').css('color', 'teal');
+                      $(row).find('td:eq(1)').css({"background-color":"#bdbdbd"});
+                      $(row).find('td:eq(2)').css('color', 'white');
+                      $(row).find('td:eq(2)').css({"background-color":"#1e88e5"});
+                      $(row).find('td:eq(3)').css('color', 'teal');
+                      $(row).find('td:eq(3)').css({"background-color":"#bdbdbd"});
+                      $(row).find('td:eq(4)').css('color', 'teal');
+                      $(row).find('td:eq(4)').css({"background-color":"#bdbdbd"});
+                      $(row).find('td:eq(5)').css('color', 'teal');
+                      $(row).find('td:eq(5)').css({"background-color":"#bdbdbd"});
+                      $(row).find('td:eq(6)').css('color', 'teal');
+                      $(row).find('td:eq(6)').css({"background-color":"#bdbdbd"});
+                      $(row).find('td:eq(7)').css('color', 'teal');
+                      $(row).find('td:eq(7)').css({"background-color":"#bdbdbd"});
+                }
+            }
+        });
+
+        $('#searchInput').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+    }
+    
+    var categories_modal = "";
+    function populate_cases(response) {
+        casestable = $('#cases-table').DataTable( {
+            data: JSON.parse(response),
+            sDom: 'lrtip',
+            bPaginate: true,
+            "bLengthChange": false, 
+            "pageLength": 40,    
+            autoWidth: true,
+            responsive: true,
+            "order": [[ 15, "desc" ]],
+            columns: [                
+                { title: "LDAP" },
+                { title: "Review Status" },
+                { title: "Reference ID", "render": function(data, type, row){
+                  if(String(data).indexOf("/") == -1 && String(data).indexOf("&") == -1 && String(data).indexOf(",") == -1 && String(data).indexOf("/") == -1 && String(data).indexOf("-") != -1)
+                  return String(data).trim().match(/.{1,15}/g).join("<br/>");
+                    else
+                    return String(data).trim().split(/,|\/|&| /).filter(String).join("<br/>");
+                  } 
+                 },
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                {visible: false},
+                // { title: "Survey URL", visible: false},
+                // { title: "Language", visible: false },
+                // { title: "Survey Type",visible: false },
+                // { title: "Screenshot",visible: false },
+                // { title: "Decision",visible: false },
+                // { title: "Start Time",visible: false },
+                // { title: "End Time",visible: false },
+                // { title: "Categories",visible: false },
+                // { title: "AHT", visible: false },
+                
+                { title: "Auditor" },
+                { title: "Score" },
+                {visible: false},
+                {visible: false},
+			
+                
+                ],
+            "initComplete": function () {
+             console.log("response: " + JSON.parse(response)[0]);
+                        $('#cases-table tbody').off().on('click', 'tr', function () {
+                            $body.addClass("loading");
+                            var data = casestable.row( this ).data(),
+                                startDate = moment().format(data[8]),
+                                endDate = data[9].toLocaleString();
+
+                            casestable.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected'); 
+                            
+                            $("#ref-modal").val(data[2]);
+                            $("#caseid-modal").val(data[3]);
+                            $("#surveytype-modal").val(data[5]);
+                            $("#lang-modal").val(data[4]);
+                            $("#ldap-modal").val(data[0]);
+                            $("#decision-modal").val(data[7]);
+                            $("#start-modal").val(startDate);
+                            $("#end-modal").val(data[9]);
+                            $("#screenshot-modal").val(data[6]);
+                            $('#screenshot-modal').trigger('autoresize');
+                            $("#aht-modal").val(data[11]);
+                            $("#qaAuditor").val(data[12]);
+                            $("#qaScore").val(data[13]);
+                            $("#qaComment").val(data[14]);
+                            $("#qaVariance").val(data[15]);
+                           categories_modal = data[10].slice(0, -1);
+                            
+                            google.script.run.withSuccessHandler(populate_categories_modal).dynamic_categories(data[4]);
+                            
+                            
+                        });
+            },'rowCallback': function(row, data, index){
+            }
+        });
+
+        $('#searchInput').on('keyup', function () {
+            casestable.search(this.value).draw();
+        });
+                        $('#refresh-').removeClass("hide");
+    }
+
+function saveChanges() {
+  swal({
+    title: "Are you sure?",
+    text: "Do you want to save the changes?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonClass: "btn-danger",
+    confirmButtonText: "Yes please",
+    closeOnConfirm: false
+  },
+  function(){
+            var data_chips= $('#categories-modal').material_chip('data');
+            var categoryString = "";
+            for(var i = 0; i < data_chips.length; i++) {
+              categoryString += `${data_chips[i].tag}, `;
+            }
+    let parameters = {
+      ref: $("#ref-modal").val(),
+      qaAuditor: $("#qaAuditor").val(),
+      qaScore: $("#qaScore").val(), 
+      qaComment: $("#qaComment").val(),
+      qaVariance: $("#qaVariance").val()
+    }
+    
+    google.script.run.withSuccessHandler(saveChanges_response).saveChanges(parameters);
+  });
+}
+
+function saveChanges_response(response) {
+  swal("Changes saved!", "The changes has been saved, yehey!.", "success");
+  refresh_table();
+}
+
+    function populate_nicases(response) {
+        nicasestable = $('#nicases-table').DataTable( {
+            data: JSON.parse(response),
+            sDom: 'lrtip',
+            bPaginate: true,
+            "bLengthChange": false, 
+            "pageLength": 40,    
+            autoWidth: true,
+            responsive: true,
+            "order": [[ 2, "desc" ]],
+            columns: [                
+                { title: "LDAP" },
+                { title: "Reference ID" },
+                { title: "Case ID", "render": function(data, type, row){
+                    return String(data).split(",").join("<br/>");
+                  }
+                }
+              ],
+            "initComplete": function () {
+                        $('#nicases-table tbody').off().on('click', 'tr', function () {
+                            var data = nicasestable.row( this ).data();
+                            nicasestable.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected'); 
+                            
+                            swal({
+                              title: "Are you sure?",
+                              text: "Do you want to assign the case?",
+                              type: "warning",
+                              showCancelButton: true,
+                              confirmButtonClass: "btn-danger",
+                              confirmButtonText: "Yes, assign it!",
+                              closeOnConfirm: false
+                            },
+                            function(){
+                              $("#newSurveyText").val(data[2]);
+                              assign_surveys();
+                              let surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+                              surveys["refID"] = data[1];
+                              surveys["start_time"] = getFormattedDate();
+                              localStorage.setItem("assigned_ewoq", JSON.stringify(surveys));
+                              swal("Case assigned!", "The case is assigned to you now.", "success");
+                            });
+                        });
+                        $('#refresh-ni').removeClass("hide");
+            },'rowCallback': function(row, data, index){
+            }
+        });
+
+    }
+    
+    function removeNE_response() {
+        $('#caseInfo').addClass("hide");
+        $("#screenshot-text").val("");
+        $("#surveytype-select").val("");
+        $("#lang-select").val("");
+        // $("#country-select").val("");
+        $("#queue-select").val("");
+        // $("#rmto-select").val("");
+        // $('#customertype-select').val("");
+        $('#lang-select').material_select();
+        // $('#country-select').material_select();
+        $('#queue-select').material_select();
+        // $('#customertype-select').material_select();
+        $('#surveytype-select').material_select();
+        // $('#rmto-select').material_select();
+        // $("#violations-select").material_select();
+        refresh_nitable();
+        refresh_table();
+        comment_just = "";
+        $("#screenshot-text").val("");
+        $(".chips .chip").remove();
+        google.script.run.withSuccessHandler(populate_categories).dynamic_categories();
+        //$("#violations-select").length = 0;
+        //$('#violations-select').material_select('destroy');
+        if(response == "success") {
+            swal("Success!","Survey/s marked finished successfully","success");
+        } else {
+            swal("Error!",response, "error");
+        }
+        finish_btn();
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+        $body.removeClass("loading");
+    localStorage.removeItem("assigned_ewoq");
+        assigned_survey = "";
+        $("#newSurveyText").val("");
+        $("#newSurveyText").removeAttr("disabled");
+    }
+
+    function populate_table_2(response) {
+    table = $('#survey-table-2').DataTable( {
+        data: JSON.parse(response),
+        bPaginate: true,
+        sDom: 'lrtip',
+        "bLengthChange": false, 
+        "pageLength": 15,    
+        autoWidth: true,
+        responsive: true,
+        "columnDefs": [
+            { "width": "20%", "targets": 2 }
+        ],
+        "initComplete": function () {
+                    $('#survey-table-2 tbody').off().on('click', 'tr', function () {
+                        var data = table.row( this ).data();
+                        table.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected'); 
+                        $('#newSurveyText').val(data[1]);
+                    });
+        }
+    });
+    $('#searchInput').on('keyup', function () {
+        table.search(this.value).draw();
+    });
+    }
+
+    function show_quote() {
+//          var list = Math.floor((Math.random() * 2) + 1);
+//            if(list == 1) {
+//              var quote = "", author = "";
+//              var rand = Math.floor((Math.random() * (quotes.length - 1)));
+//              quote = '"' + quotes[rand][0] + '"';
+//              author = quotes[rand][1];
+//              var announcementText = `
+//              <br>
+//              <h3 class="subheader">GOOD READ</h3>
+//              <ul class="list">
+//                  <li>
+//                      <div class="valign-wrapper">
+//                          <div class="title">
+//                              <span style="font-size: 18px;"><i>${quote}</i></span><br>
+//                              <span><b>&nbsp; - ${author}</b></span>
+//                          </div>
+//                      </div>
+//                  </li>
+//              </ul><br><br>
+//              `;
+//              let announcement = `<span style="max-width: 500px; width: 360px; word-break: normal; color: #fff; letter-spacing: 0.04em;">${announcementText}</span>`;
+//              Materialize.toast(announcement, 20000);
+//              }
+//            else if(list == 2) {
+//              var qq = "", answer = "";
+//              var rand = Math.floor((Math.random() * (fun_facts.length - 1)) + 1);
+//              qq =  fun_facts[rand][0];
+//              answer = '"' + fun_facts[rand][1] + '"';
+//              var announcementText = `
+//              <br>
+//              <h3 class="subheader">FUN FACTS</h3>
+//              <ul class="list">
+//                  <li>
+//                      <div class="valign-wrapper">
+//                          <div class="title">
+//                              <span style="font-size: 18px;"><b>${qq}</b></span><br>
+//                              <span><i>${answer}</i></span>
+//                          </div>
+//                      </div>
+//                  </li>
+//              </ul><br><br>
+//              `;
+//              let announcement = `<span style="max-width: 500px; width: 360px; word-break: normal; color: #fff; letter-spacing: 0.04em;">${announcementText}</span>`;
+//              Materialize.toast(announcement, 20000);
+//              }
+    }
+          
+    var nmin = 0, nsec = 0, nhour = 0; 
+    let isPaused = false; 
+    function AHT() {
+        if((nmin >= 5 && nsec == 0) || nhour > 0) {
+          const aht_alert = document.querySelector('#aht-flag');
+          aht_alert.classList.remove('hide');
+        }
+        document.getElementById('aht').innerText = nhour + ":" + nmin + ":" + nsec + " mins";
+        if  (!isPaused){
+            nsec += 1;
+            if (nsec == 60) {
+                nsec = 0;
+                nmin += 1;
+            }
+            
+            else if (nmin == 60) {
+                nmin = 0;
+                nhour += 1;
+            }
+        }
+    }
+
+    function queueChange() {
+        $body.addClass("loading");
+          $('#queueChange-elements').removeClass("hide");
+          $('#case-actions').removeClass("hide");
+      if($("#queue-select").val().indexOf("Survey Review") != -1) {
+        $("#for-sr").removeClass("hide");
+        enableActions();
+        $('#closeCase').addClass("disabled");
+        $('#closeCase').addClass("hide");
+        $('#cust-type').addClass("hide");
+        $('#country-lang').removeClass("hide");
+      } else {
+        $('#cust-type').addClass("hide");
+        $("#for-sr").addClass("hide");
+          $('#country-lang').addClass("hide");
+        disableActions();
+        if($("#queue-select").val() == "Support") {
+          $('#cust-type').removeClass("hide");
+          $('#country-lang').removeClass("hide");
+        }
+        $('#closeCase').removeClass("disabled");
+        $('#closeCase').removeClass("hide");
+        $('#enable_actions').addClass("disabled");
+        $('#enable_actions').addClass("hide");
+      }
+        google.script.run.withSuccessHandler(populate_categories).dynamic_categories($("#queue-select").val());
+    }
+    
+    function disableActions (){
+        // For State Control
+        const compliantBtn = document.querySelector('#compliant-btn');
+        const markreviewedBtn = document.querySelector('#close-btn');
+        const noncompliantBtn = document.querySelector('#noncompliant-btn');
+        const needsinfoBtn = document.querySelector('#needsinfo-btn');
+        compliantBtn.classList.add('hide');
+        markreviewedBtn.classList.add('hide');
+        noncompliantBtn.classList.add('hide');
+//            needsinfoBtn.classList.add('hide');
+    }
+    
+    
+    function enableActions (){
+        // For State Control
+        const compliantBtn = document.querySelector('#compliant-btn');
+        const markreviewedBtn = document.querySelector('#close-btn');
+        const noncompliantBtn = document.querySelector('#noncompliant-btn');
+        const needsinfoBtn = document.querySelector('#needsinfo-btn');
+        compliantBtn.classList.remove('hide');
+        markreviewedBtn.classList.remove('hide');
+        noncompliantBtn.classList.remove('hide');
+        // needsinfoBtn.classList.remove('hide');
+        
+        
+        $('#closeCase').addClass("disabled");
+        $('#closeCase').addClass("hide");
+        $('#enable_actions').addClass("disabled");
+        $('#enable_actions').addClass("hide");
+    }
+
+    function compliant() {
+        // disableActions();
+        $body.addClass("loading");
+      let surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+      
+      surveys["decision"] = "compliant";
+      surveys["survey_status"] = "compliant";
+      localStorage.setItem("assigned_ewoq", JSON.stringify(surveys));
+      compliant_success("success");
+    }
+        
+    function close() {
+        // disableActions();
+        $body.addClass("loading");
+      let surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+      
+      surveys["decision"] = "deleted";
+      surveys["survey_status"] = "deleted";
+      localStorage.setItem("assigned_ewoq", JSON.stringify(surveys));
+      close_success("success");
+    }
+    
+    function mark_reviewed() {
+        // disableActions();
+        $body.addClass("loading");
+      let surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+      
+      surveys["decision"] = "deleted";
+      surveys["survey_status"] = "deleted";
+      localStorage.setItem("assigned_ewoq", JSON.stringify(surveys));
+      compliant_success("success");
+    }
+
+    function noncompliant() {
+        $body.addClass("loading");
+      let surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+      
+      surveys["decision"] = "noncompliant";
+      surveys["survey_status"] = "noncompliant";
+      localStorage.setItem("assigned_ewoq", JSON.stringify(surveys));
+      compliant_success("success");
+    }
+
+    function needsInfo() {
+        // Add end time
+        $body.addClass("loading");
+      let surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+      
+      surveys["end_time"] = new Date();
+      surveys["decision"] = "needs_info";
+      surveys["survey_status"] = "needs_info";
+      localStorage.setItem("assigned_ewoq", JSON.stringify(surveys));
+      surveys = JSON.parse(localStorage.getItem('assigned_ewoq'));
+      google.script.run.withSuccessHandler(needsInfonew_success).setNeedsInfo({
+        cases: surveys["survey_ids"],
+        start_time: surveys["start_time"],
+        end_time: surveys["end_time"]
+      
+      });
+//          if  (!localStorage.assigned){
+//            localStorage.setItem("needs_info",JSON.stringify({surveys["survey_ids"]:[
+//              "survey_ids": surveys["survey_ids"]
+//              , "start_time": surveys["start_time"]
+//              , "end_time": new Date()
+//              , "decision": "needs_info"
+//            ]}));
+//            } else {
+//              console.log('There is assigned survey.');
+//            }
+      $body.removeClass("loading");
+      document.querySelector('#needsinfo-btn').classList.add('disabled');
+      isPaused = true;
+//          addCards(surveys["survey_ids"]);
+      swal("Success!","Survey/s has been set to Needs Info successfully","success");
+    
+    
+    }
+    
+    function needsInfonew_success() {
+      refresh_nitable();
+    }
+
+    function forceStopped() {
+        $body.addClass("loading");
+        decision = "force-stopped";
+        // var array = [];
+        // let surveysList = document.querySelectorAll('.surveyIdInput');
+        // surveysList.forEach((element) => {
+        //     array.push(element.value.trim());
+        // });
+        if(queue == "bls1")
+            google.script.run.withSuccessHandler(forceStopped_success).forceStopped_bls1(assigned_survey);
+        else if(queue == "core")
+            google.script.run.withSuccessHandler(forceStopped_success).forceStopped_core(assigned_survey);
+        else if(queue == "crust")
+            google.script.run.withSuccessHandler(forceStopped_success).forceStopped_crust(assigned_survey);
+        else
+            google.script.run.withSuccessHandler(forceStopped_success).forceStopped_bls2(assigned_survey);
+    }
+
+    function compliant_success(response) {
+        add_log("compliant the survey.");
+        $('#closeCase').removeClass("disabled");
+        $('#closeCase').removeClass("hide");
+        $('#enable_actions').removeClass("disabled");
+        $('#enable_actions').removeClass("hide");
+        $('#openEmail').removeClass("hide");
+        $('#openEmail').removeClass("disabled");
+        if(response == "success")
+            swal("Success!","Survey/s marked compliant successfully","success");
+            else
+            swal("Error!",response,"error");
+        $body.removeClass("loading");
+        disableActions();
+    }
+    
+    function close_success(response) {
+        add_log("marked the survey as deleted.");
+        $('#closeCase').removeClass("disabled");
+        $('#closeCase').removeClass("hide");
+        $('#enable_actions').removeClass("disabled");
+        $('#enable_actions').removeClass("hide");
+        $('#openEmail').removeClass("hide");
+        $('#openEmail').removeClass("disabled");
+        if(response == "success")
+            swal("Success!","Survey/s marked compliant successfully","success");
+            else
+            swal("Error!",response,"error");
+        $body.removeClass("loading");
+        disableActions();
+    }
+    
+    
+    function markreviewed_success(response) {
+        add_log("mark reviewed the survey.");
+        $('#closeCase').removeClass("disabled");
+        $('#closeCase').removeClass("hide");
+        $('#enable_actions').removeClass("disabled");
+        $('#enable_actions').removeClass("hide");
+        $('#openEmail').removeClass("hide");
+        $('#openEmail').removeClass("disabled");
+        if(response == "success")
+            swal("Success!","Survey/s marked reviewed successfully","success");
+            else
+            swal("Error!",response,"error");
+        $body.removeClass("loading");
+        disableActions();
+    }
+    
+    function noncompliant_success(response) {
+        add_log("noncompliant the survey.");
+        $('#closeCase').removeClass("disabled");
+        $('#closeCase').removeClass("hide");
+        $('#enable_actions').removeClass("disabled");
+        $('#enable_actions').removeClass("hide");
+        $('#openEmail').removeClass("hide");
+        $('#openEmail').removeClass("disabled");
+        if(response == "success")
+            swal("Success!","Survey/s marked noncompliant successfully","success");
+            else
+            swal("Error!",response,"error");
+            $body.removeClass("loading");
+            disableActions();
+    }
+
+    function needsInfo_success(response) {
+        add_log("needs info the survey.");
+//            initialize_btn();
+        if(response == "success")
+            swal("Success!","Survey/s has been set to Needs Info successfully","success");
+            else
+            swal("Error!",response,"error");
+        $body.removeClass("loading");
+        // $('needsInfo').addClass("disabled");
+        document.querySelector('#needsinfo-btn').classList.add('disabled');
+    }
+
+    function forceStopped_success(response) {
+        add_log("force stopped the survey.");
+        $('#closeCase').removeClass("disabled");
+        $('#closeCase').removeClass("hide");
+        $('#enable_actions').removeClass("disabled");
+        $('#enable_actions').removeClass("hide");
+        $('#openEmail').removeClass("disabled");
+        $('#openEmail').removeClass("hide");
+        if(response == "success")
+            swal("Success!","Survey/s marked force-stopped successfully","success");
+            else
+            swal("Error!",response,"error");
+        $body.removeClass("loading");
+        disableActions();
+    }
+    
+    function populate_categories(categories) {
+        var my_data = {};
+        for(var i = 0; i < categories.length ; i++) {
+          
+          my_data['key' + i.toString()] = categories[i];
+        }              
+        var myConvertedData = {};
+        $.each(my_data, function(index, value) {
+          myConvertedData[value] = null;
+        });
+        $('#violations-chip').material_chip({
+        autocompleteOptions: {
+          data: myConvertedData,
+            limit: Infinity,
+            minLength: 1
+            },
+            placeholder: 'tag-',
+            secondaryPlaceholder: '+tag-'
+        });
+        $body.removeClass("loading");
+    }
+    
+    
+    function populate_categories_modal(categories) {
+        var my_data = {};
+        for(var i = 0; i < categories.length ; i++) {
+          
+          my_data['key' + i.toString()] = categories[i];
+        }              
+        var myConvertedData = {};
+        $.each(my_data, function(index, value) {
+          myConvertedData[value] = null;
+        });
+        
+        
+        var authData = [];
+        for(var i = 0; i < categories_modal.split(",").length; i++) {
+          var tag = {};
+          tag["tag"] = categories_modal.split(",")[i];
+          authData.push(tag);
+        }
+        
+        $('#categories-modal').material_chip({
+        data: authData,
+        autocompleteOptions: {
+          data: myConvertedData,
+            limit: Infinity,
+            minLength: 1
+            },
+            placeholder: 'tag-',
+            secondaryPlaceholder: '+tag-'
+        });
+        
+        
+        $("#fullDataTr").modal("open");
+        $body.removeClass("loading");
+    }
+    
+    
+    function refresh_nitable() {
+        $('#refresh-ni').addClass("hide");
+        nicasestable.clear();
+        nicasestable.destroy();
+        
+        google.script.run.withSuccessHandler(populate_nicases).getNICases();
+    }       
+    
+    function refresh_table() {
+        $('#refresh-').addClass("hide");
+          casestable.clear();
+          casestable.destroy();
+          
+          google.script.run.withSuccessHandler(populate_cases).getCases();
+    }
+    
+function addCards(cases){
+    alert(cases);
+    const needsinfoCollection = document.querySelector('#needs_info_col');
+    
+        let newCard = document.createElement('DIV');
+        newCard.classList.add("col","s12");
+        newCard.innerHTML = `
+        <div id="${cases}Card" class="card hoverable">
+            <div class="card-content">
+                <span class="card-title">Needs info case</span>
+                <h4>${cases}</h4>
+            </div> 
+                  <div class="card-action" align="right">
+                          <a id="continue${cases}" onclick="assign_surveys_ne(${cases})" class="btn waves-effect blue waves-light tooltipped" data-position="top" data-delay="50" data-tooltip="Continue this case" data-tooltip-id="52c0e579-8c5a-57ec-1f67-4c93aaf0d042">
+                              <i class="material-icons right">play_arrow</i>
+                              <span class="hide-on-chrome">CONTINUE</span>
+                          </a>
+                  </div>
+        </div>
+        `;
+        needsinfoCollection.appendChild(newCard);
+    }
+    
+    function finish() {
+      try {
+            var data_chips= $('#violations-chip').material_chip('data');
+            var categoryString = "";
+            for(var i = 0; i < data_chips.length; i++) {
+              categoryString += `${data_chips[i].tag}, `;
+            }
+        $body.addClass("loading");
+            // var array = [];
+            // let surveysList = document.querySelectorAll('.surveyIdInput');
+            // surveysList.forEach((element) => {
+            //     array.push(element.value.trim());
+            // });
+            if(nmin > 5) {
+                var aht_alert = document.querySelector('#aht-flag');
+                aht_alert.classList.add('hide');
+            }
+            clearInterval(refreshIntervalId);
+            nmin = 0;
+            nsec = 0;
+            nhour = 0;
+            let ahtText = document.getElementById("aht").innerText;
+            document.getElementById("aht").innerText = "0:0:0 mins";
+            
+
+            
+            let val = JSON.parse(localStorage.getItem("assigned_ewoq")),
+                endTime = getFormattedDate(),
+                aht = Math.abs(new Date(endTime) - new Date(val["start_time"])),
+                min = Math.floor((aht/1000)/60),
+                sec = Math.floor((aht/1000)%60),
+                endless = "";
+                
+            if(val["decision"] == "needs_info") endless = new Date(val["end_time"]).toString();
+            else endless = "";
+        if($("#queue-select").val() == "Survey Review")
+        var parameters = {
+            "ldap": localStorage.ldap,
+            "refID": val["refID"],
+            "decision": val["decision"],
+            "screenshot": $("#screenshot-text").val(),
+            "surveys": val["survey_ids"],
+            "surveytype": $("#surveytype-select").val(),
+            "customertype": "",
+            "language": $("#lang-select").val(),
+            "country": $("#country-select").val(),
+            "queuetype": $("#queue-select").val(),
+            "categories": categoryString.replace("undefined",""),
+            "rmto": $("#rmto-select").val(),
+            "start_time": val["start_time"],
+            "end_time": endTime,
+            "aht": "00:" + min + ":" + sec
+        };
+        google.script.run.withSuccessHandler(removeNE_response).removeNE(JSON.stringify(parameters));
+        // google.script.run.withSuccessHandler(finish_success).finish_ewoq(parameters);
+        //  surveyCategories.length = 0;  
+        } catch(err) {
+          console.log("err: "+err);
+          swal("Error!","Oops! Some fields seems empty.","error");
+        }
+    }
+
+    function getFormattedDate(){
+      let date = new Date(),
+      formattedDate = (date.getMonth() + 1) + '/' + date.getDate() +  "/" + date.getFullYear();
+      return formattedDate = formattedDate + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+    
+    function removeNE_response(response){
+      $('#caseInfo').addClass("hide");
+        $("#screenshot-text").val("");
+        $("#surveytype-select").val("");
+        $("#lang-select").val("");
+        $("#country-select").val("");
+        $("#queue-select").val("");
+        $("#rmto-select").val("");
+        $('#customertype-select').val("");
+        $('#lang-select').material_select();
+        $('#country-select').material_select();
+        $('#queue-select').material_select();
+        $('#customertype-select').material_select();
+        $('#surveytype-select').material_select();
+        $('#rmto-select').material_select();
+        $("#violations-select").material_select();
+        refresh_nitable();
+        refresh_table();
+        comment_just = "";
+        $("#screenshot-text").val("");
+        $(".chips .chip").remove();
+        google.script.run.withSuccessHandler(populate_categories).dynamic_categories();
+        //$("#violations-select").length = 0;
+        //$('#violations-select').material_select('destroy');
+        if(response == "success") {
+            swal("Success!","Survey/s marked finished successfully","success");
+        } else {
+            swal("Error!",response, "error");
+        }
+        finish_btn();
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+        $body.removeClass("loading");
+    localStorage.removeItem("assigned_ewoq");
+        assigned_survey = "";
+        $("#newSurveyText").val("");
+        $("#newSurveyText").removeAttr("disabled");
+      console.log(response);
+    }
+    
+    function duplicate() {
+        $body.addClass("loading");
+            google.script.run.withSuccessHandler(close_success).close_core(assigned_survey);
+      
+    }
+    
+    function close_success(response) {
+        comment_just = "";
+        $("#screenshot-text").val("");
+        $(".chips .chip").remove();
+            if(nmin > 5) {
+                var aht_alert = document.querySelector('#aht-flag');
+                aht_alert.classList.add('hide');
+            }
+            clearInterval(refreshIntervalId);
+            nmin = 0;
+            nsec = 0;
+            nhour = 0;
+            let ahtText = document.getElementById("aht").innerText;
+            let ahtNoText = ahtText.replace('mins','').trim();
+            document.getElementById("aht").innerText = "0:0:0 mins"
+        google.script.run.withSuccessHandler(populate_categories).dynamic_categories();
+        $("#violations-select").length = 0;
+        $('#violations-select').material_select('destroy');
+        if(response == "success") {
+            swal("Success!","Survey successfully marked as duplicate/error","success");
+        } else {
+            swal("Error!",response, "error");
+        }
+        finish_btn();
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+        $body.removeClass("loading");
+        if(queue == "core")
+        refresh_core();
+        else if(queue == "crust")
+        refresh_crust();
+        assigned_survey = "";
+    
+    }
+    
+    function composeEmail() {
+        
+    }
+    
+    function finish_success(response) {
+        // add_log("finished the survey.");
+        $('#caseInfo').addClass("hide");
+        $("#screenshot-text").val("");
+        $("#surveytype-select").val("");
+        $("#lang-select").val("");
+        $("#country-select").val("");
+        $("#queue-select").val("");
+        $("#rmto-select").val("");
+        $('#customertype-select').val("");
+        $('#lang-select').material_select();
+        $('#country-select').material_select();
+        $('#queue-select').material_select();
+        $('#customertype-select').material_select();
+        $('#surveytype-select').material_select();
+        $('#rmto-select').material_select();
+        $("#violations-select").material_select();
+        refresh_nitable();
+        refresh_table();
+        comment_just = "";
+        $("#screenshot-text").val("");
+        $(".chips .chip").remove();
+        google.script.run.withSuccessHandler(populate_categories).dynamic_categories();
+        //$("#violations-select").length = 0;
+        //$('#violations-select').material_select('destroy');
+        if(response == "success") {
+            swal("Success!","Survey/s marked finished successfully","success");
+        } else {
+            swal("Error!",response, "error");
+        }
+        finish_btn();
+            $('#bls1_list').removeAttr('disabled');
+            $('#bls2_list').removeAttr('disabled');
+        $body.removeClass("loading");
+    localStorage.removeItem("assigned_ewoq");
+        assigned_survey = "";
+        $("#newSurveyText").val("");
+        $("#newSurveyText").removeAttr("disabled");
+    }
+    
+    function finish_btn() {
+        $('#closeCase').addClass("hide");
+        $('#enable_actions').addClass("hide");
+        $('#openEmail').addClass("hide");
+        
+        $('#start-review').addClass("disabled");
+        $('#unassign-survey').addClass("disabled");
+        $('#compliant-btn').addClass("disabled");
+        $('#close-btn').addClass("disabled");
+        $('#noncompliant-btn').addClass("disabled");
+        // $('#needsinfo-btn').addClass("disabled");
+        
+        $('#compliant-btn').removeClass("hide");
+        $('#close-btn').removeClass("hide");
+        $('#noncompliant-btn').removeClass("hide");
+        // $('#needsinfo-btn').removeClass("hide");
+        
+        
+        $('#closeCase').addClass("disabled");
+        $('#openEmail').addClass("disabled");
+        $('#enable_actions').addClass("disabled");
+        
+        $('#surveytype-select').val("").change;
+        $('#queue-select').val("").change;
+        $('#customertype-select').val("").change;
+        $('#processed-select').val("").change;
+        $('#surveytype-select').material_select();
+        $('#queue-select').material_select();
+        $('#customertype-select').material_select();
+        $('#processed-select').material_select();
+    
+    }
+    
+    function send_email() {
+        let parameters = {
+            "recipient": $("#recipient-text").val(),
+            "subject": $("#subject-text").val(),
+            "surveyid": $("#surveyid-text").val(),
+            "email":  $('#editor .ql-editor').html()
+        };
+        google.script.run.withSuccessHandler(email_status).send_email(parameters);
+    }
+    
+    function send_ne() {
+        let parameters = {
+            "recipient": $("#recipient-text-ne").val(),
+            "subject": $("#subject-text-ne").val(),
+            "surveyid": assigned_survey,
+            "email":  $('#editor-ne .ql-editor').html()
+        };
+        google.script.run.withSuccessHandler(email_status).send_email_ne(parameters);
+        
+    }
+
+    function sendFeedback() {
+        const surveyUrl = document.querySelector('#surveyUrl');
+        const messageText = document.querySelector('#messageText');
+        const screenshotUrl = document.querySelector('#screenshotUrl');
+
+
+        const emailSubject = "A Feedback from CORE Contingency Tool";
+        const recipients = 'reubenmark@google.com, johnpauljoseph@google.com';
+
+        surveyUrl2.textContent = surveyUrl.value;
+        messageText2.textContent = messageText.value;
+        screenshotUrl2.textContent = screenshotUrl.value;
+
+        
+        let parameters = {
+            "recipient": recipients,
+            "subject": emailSubject,
+            "messageText": emailEditor.innerHTML,
+            "surveyid": surveyUrl.value,
+            "message": messageText.value,
+            "screenshot": screenshotUrl.value
+        };
+        google.script.run.withSuccessHandler(email_status).sendFeedback(parameters);
+    }
+    
+    function search_survey() {
+        google.script.run.withSuccessHandler(search_status).search_survey($("#survey-search").val().trim());
+    }
+    
+    function search_status(response) {
+        if(response["status"] == "success") {
+        $("#ldap-modal").val(response["ldap"]);
+        $("#country-modal").val(response["country"]);
+        $("#surveyid-modal").val(response["surveyid"]);
+        $("#ref-modal").val(response["refid"]);
+        $("#sent-modal").val(new Date(response["sent"]).toLocaleString());
+        $("#title-modal").val(response["title"]);
+        $("#creator-modal").val(response["creator"]);
+        $("#lang-modal").val(response["lang"]);
+        $("#timesrev-modal").val(response["times_rev"]);
+        $("#screenshot-modal").val(response["screenshot"]);
+        $("#decision-modal").val(response["decision"]);
+        $("#categories-modal").val(response["categories"]);
+        $("#aht-modal").val(response["aht"]);
+        $("#surveytype-modal").val(response["surveytype"]);
+        $("#commentjust-modal").val(response["comment_just"]);
+        if(response["email"] == "" || response["subject"] == "") {
+          $("#email-modal").val("No subject to be displayed...");
+          $("#subject-modal").val("No email body to be displayed...");
+        } else {
+          $("#email-modal").val(response["email"]);
+          $("#subject-modal").val(response["subject"]);
+        }
+        $("#start-modal").val(new Date(response["start"]).toLocaleString());
+        $("#end-modal").val(new Date(response["end"]).toLocaleString());
+        if(response["email"] == "" || response["subject"] == "") {
+          document.getElementById("email-modal").innerText = "No subject to be displayed...";
+          document.getElementById("subject-modal").innerText = "No email body to be displayed...";
+        } else {
+          document.getElementById("email-modal").innerHTML = response["email"];
+          document.getElementById("subject-modal").innerHTML = response["subject"];
+        }
+        $("#fullDataTr").modal("open");
+        } else {
+        swal("Error!","No survey ID found.", "error");
+        }
+    }
+    
+    function email_status(response) {
+        if(response == "success") {
+            swal("Success!","Email Sent","success");
+        } else {
+            swal("Error!",response,"error");
+        }
+    }
+    
+//          function needsInfo() {
+//            // Add end time
+//            $body.addClass("loading");
+//            // $('#closeCase').removeClass("disabled");
+//            // decision = "needs info";
+//            // var array = [];
+//            // let surveysList = document.querySelectorAll('.surveyIdInput');
+//            // surveysList.forEach((element) => {
+//            //     array.push(element.value.trim());
+//            // });
+//            if(queue == "bls1")
+//                google.script.run.withSuccessHandler(needsInfo_success).needsInfo_bls1(assigned_survey);
+//            else if(queue == "core")
+//                google.script.run.withSuccessHandler(needsInfo_success).needsInfo_core(assigned_survey);
+//                else if(queue == "ewoq")
+//                google.script.run.withSuccessHandler(needsInfo_success).needsInfo_ewoq(assigned_survey);
+//            else if(queue == "crust")
+//                google.script.run.withSuccessHandler(needsInfo_success).needsInfo_crust(assigned_survey);
+//            else
+//                google.script.run.withSuccessHandler(needsInfo_success).needsInfo_bls2(assigned_survey);
+//            
+//            // Stop/pause AHT
+//            isPaused = true;
+//        }
+    
+    
+
+function createAnnouncement() {
+    const announcementSubject = document.querySelector('#announcementSubject').value,
+        announcementAbout = document.querySelector('#announcementAbout').value,
+        announcementScreenshot = document.querySelector('#announcementScreenshot').value,
+        ldap = document.querySelector('#userLdap').innerText;
+
+
+    // surveyUrl2.textContent = surveyUrl.value;
+    // messageText2.textContent = messageText.value;
+    // screenshotUrl2.textContent = screenshotUrl.value;
+
+    
+    let parameters = {
+        "notif_id": guid(),
+        "subject": announcementSubject,
+        "about": announcementAbout,
+        "screenshot": announcementScreenshot,
+        "ldap": ldap,
+        "date": datez
+    };
+    google.script.run.withSuccessHandler(announcement_status).create_announcement(parameters);
+}
+
+function announcement_status(response) {
+    if(response == "success") {
+        swal("Success!","New announcement created!", "success");
+    } else {
+        swal("Error!",response,"error");
+    }
+}
+
+function refresh_feedback() {
+  swal("Coming Soon!","Under Construction", "info");
+}
+
+
+function add_log(parameters) {
+    console.log(parameters);
+    var params = {
+      survey: assigned_survey,
+      log: parameters
+    };
+    google.script.run.withSuccessHandler(log_status).add_log(params);
+  }
+  
+  function log_status() {
+  
+  }
+
+function search() {
+    // try {
+        google.script.run.withSuccessHandler(searchFeed).search(document.getElementById("entityIDSearchInput").value);
+        // document.getElementById('dataTable').innerHTML = "";
+        // document.getElementById("spinner").style.display = "block";
+        // document.getElementById("resultsModalBtn").click();
+    // } catch(e) {
+    //     Swal.fire({type: 'error', title: 'Tempus', html: "Error: " + e + "<br> Reload to try again.", showConfirmButton: false, allowOutsideClick: false,});
+    // }
+}
+
+function searchFeed(data) {
+    console.log("data: " + data);
+    console.log("data2: " + JSON.stringify(data));
+    createTable(data);
+
+}
+
+function createTable(myArray) {
+    let resultsParent = document.querySelector('#resultsParent');
+
+    myArray.forEach(result => {
+        let newTr = document.createElement('tr');
+        result.forEach(resultData => {
+            let td = document.createElement('td');
+            td.textContent = resultData
+            newTr.appendChild(td);
+        });
+        resultsParent.appendChild(newTr);
+    });
+}
+
+function checkForQA(){
+  // console.log(localStorage.ldap);
+  const name = localStorage.ldap;
+
+  let QAStatus = qaList.includes(name) ? true : false;
+  return QAStatus;
+}
+
+function qaView(){
+  const qaCard = document.querySelector('#surveyInfoQA');
+  if (checkForQA() !== true){
+    qaCard.classList.add("hide");
+  } else {
+    console.log(checkForQA);
+  }
+}
+
+
+
+
+  
+  
+    
+</script>

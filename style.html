@@ -1,0 +1,41 @@
+<style>
+
+
+  body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+  }
+  
+  main {
+      margin-top: 40px;
+      min-height: 100vh;
+      flex: 1 0 auto;
+  }
+
+  .modal_load {
+      display:    none;
+      justify-content: center;
+      align-items: center;
+      position:   fixed;
+      z-index:    1000;
+      height:     100%;
+      width:     100vw;
+      background: rgba( 255, 255, 255, .8 ) 
+      /* url('https://greenido.files.wordpress.com/2017/09/image1.gif?w=300') 
+      50% 50% 
+      no-repeat; */
+  }
+  
+  body.loading {
+      overflow: hidden;   
+  }
+
+  body.loading .modal_load {
+      display: flex;
+  }
+  
+  footer{
+      flex: 1 0 auto;
+  }
+</style>
